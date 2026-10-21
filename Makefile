@@ -24,3 +24,12 @@ xcodebuild:
 	  -destination 'generic/platform=macOS' \
 	  -derivedDataPath build \
 	  build
+
+# Parser benchmark/smoke test. Extra files: make vrml-bench FILES="a.wrl b.wrl"
+.PHONY: vrml-bench
+vrml-bench:
+	mkdir -p build
+	swiftc -O QuickLookStep/VRMLParser.swift Tools/vrmlbench/main.swift -o build/vrmlbench
+	./build/vrmlbench Tools/vrmlbench/fixtures/*.wrl $(FILES)
+	@echo "Expected failures:"
+	! ./build/vrmlbench Tools/vrmlbench/fixtures/invalid/*.wrl
