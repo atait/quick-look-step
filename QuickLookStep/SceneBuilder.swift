@@ -66,6 +66,24 @@ enum SceneBuilder {
                 dataStride: 3 * MemoryLayout<Float>.size
             ))
         }
+        // Per-vertex colours from the STEP styling. SceneKit multiplies them
+        // with the (white) diffuse colour below.
+        if let colors = mesh.colors {
+            let colorData = Data(
+                bytes: colors,
+                count: vertexCount * 3 * MemoryLayout<Float>.size
+            )
+            sources.append(SCNGeometrySource(
+                data: colorData,
+                semantic: .color,
+                vectorCount: vertexCount,
+                usesFloatComponents: true,
+                componentsPerVector: 3,
+                bytesPerComponent: MemoryLayout<Float>.size,
+                dataOffset: 0,
+                dataStride: 3 * MemoryLayout<Float>.size
+            ))
+        }
 
         let indexData = Data(
             bytes: mesh.tris!,
